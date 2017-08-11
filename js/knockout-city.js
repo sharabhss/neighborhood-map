@@ -2,28 +2,28 @@ var cities = [
  	{
  		city: "Indianapolis",
  		state: "Indiana",
-        articleList: getNytArticles("Indianapolis")
+    //articleList: getNytArticles("Indianapolis")
  	},
-    {
-    	city: "Chicago",
-    	state: "Illinois",
-        articleList: getNytArticles("Chicago")
-    },
-    {
-    	city: "Milwaukee",
-    	state: "Wisconsin",
-        //articleList: getNytArticles("Milwaukee")
-    },
-    {
-    	city: "Detroit",
-    	state: "Michigan",
-        //articleList: getNytArticles("Detroit")
-    },
-    {
-    	city: "Cincinnati",
-    	state: "Ohio",
-        //articleList: getNytArticles("Cincinnati")
-    }
+  {
+  	city: "Chicago",
+  	state: "Illinois",
+    //articleList: getNytArticles("Chicago")
+  },
+  {
+  	city: "Milwaukee",
+  	state: "Wisconsin",
+    //articleList: getNytArticles("Milwaukee")
+  },
+  {
+  	city: "Detroit",
+  	state: "Michigan",
+    //articleList: getNytArticles("Detroit")
+  },
+  {
+  	city: "Cincinnati",
+  	state: "Ohio",
+    //articleList: getNytArticles("Cincinnati")
+  }
 ];
 
 var City = function(data) {
@@ -47,31 +47,49 @@ var ViewModel = function() {
 	};
 };
 
-    // function to get 5 New York Times Headlines for given city name
-    function getNytArticles(city) {
-    var articleList = [];
-    var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-    url += '?' + $.param({
-      'q': city,
-      'sort': "newest",
-      'fl': "web_url, headline",
-      'api-key': "de208adf347547fb9eebe7a46a8f3695"
-    });
-    $.ajax({
-      url: url,
-      method: 'GET',
-    }).done(function(result) {
-       var articles = result.response.docs;
-       for (var i = 0; i < 5; i++) {
-                var article = articles[i];
-                articleList.push('<li class="article-link">' + '<a href="' + article.web_url + '">' + article.headline.main + '</a>' + '</li>');
-            };
+//     // function to get 5 New York Times Headlines for given city name
+//     function getNytArticles(city) {
+//     var articleList = [];
+//     var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+//     url += '?' + $.param({
+//       'q': city,
+//       'sort': "newest",
+//       'fl': "web_url, headline",
+//       'api-key': "de208adf347547fb9eebe7a46a8f3695"
+//     });
+//     $.ajax({
+//       url: url,
+//       method: 'GET',
+//     }).done(function(result) {
+//        var articles = result.response.docs;
+//        for (var i = 0; i < 5; i++) {
+//                 var article = articles[i];
+//                 articleList.push('<li class="article-link">' + '<a href="' + article.web_url + '">' + article.headline.main + '</a>' + '</li>');
+//             };
 
-    }).fail(function(err) {
-      throw err;
-    });
+//     }).fail(function(err) {
+//       throw err;
+//     });
 
-    return articleList;
-};
+//     return articleList;
+// };
+
+function filter() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 
 ko.applyBindings(new ViewModel());

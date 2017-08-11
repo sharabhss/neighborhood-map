@@ -56,4 +56,14 @@ Filter Search Table Style*/
   }
 }
 
-/*Google Map Styles Ends
+/*Google Map Styles Ends*/
+
+/*InfoWindow NYT Articles Styles Starts*/
+.article-list {
+  font-size: 16px;
+  margin: auto;
+  color: navy;
+}
+
+
+/*InfoWindow NYT Articles Styles Ends*/

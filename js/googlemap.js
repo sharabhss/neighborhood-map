@@ -64,19 +64,49 @@
           infoWindow.marker = null;
         });
         // TODO: ADD NYT or Foursquare API to populate infoWindow and have error handler
-        var markerCity = marker.title.split(',');
         var markerCityIndex;
         for (var i = 0; i < cities.length; i++) {
-          if (marker.title[0] === cities[i].city) {
+          if (marker.title.split(',')[0] === cities[i].city) {
             markerCityIndex = i;
           }
         }
-        var contentString = '<div><h2>' + marker.title + '</h2></div>' + '<div class="nytimes-container">' + '<h4 id="nytimes-header">New York Times Headlines</h4><ul id="nytimes-articles" class="article-list">' + cities[markerCityIndex].articleList + '</ul></div>';
+
+        //var contentString = '<div><h2>' + marker.title + '</h2></div>' + '<div class="nytimes-container">' + '<h4 id="nytimes-header">New York Times Headlines</h4><ul id="nytimes-articles" class="article-list">' + cities[markerCityIndex].articleList + '</ul></div>';
+        var contentString = '<div><h2>' + marker.title + '</h2></div>' + '<div class="nytimes-container">' + '<h4 id="nytimes-header">New York Times Headlines</h4><ul id="nytimes-articles" class="article-list">' + articleListArray + '</ul></div>';
         infoWindow.setContent(contentString);
         // open infoWindow with marker is clicked
         infoWindow.open(map, marker);
       }
     }
+      var articleListArray = getNytArticles("Milwaukee");
+
+    // function to get 5 New York Times Headlines for given city name
+    function getNytArticles(city) {
+    var articleList = [];
+    var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+    url += '?' + $.param({
+      'q': city,
+      'sort': "newest",
+      'fl': "web_url, headline",
+      'api-key': "de208adf347547fb9eebe7a46a8f3695"
+    });
+    $.ajax({
+      url: url,
+      method: 'GET',
+    }).done(function(result) {
+       var articles = result.response.docs;
+       for (var i = 0; i < 5; i++) {
+                var article = articles[i];
+                articleList.push('<li class="article-link">' + '<a href="' + article.web_url + '">' + article.headline.main + '</a>' + '</li>');
+            };
+
+    }).fail(function(err) {
+      throw err;
+    });
+
+    return articleList;
+};
+
     // function to make sure there are search results for locations and creates a marker for each location
     function callback(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
