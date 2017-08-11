@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>Neighborhood Map</title>
+  <link href="css/style.css" rel="stylesheet">
+  <!-- Link google api, jquery CDN, table js, and google map implementation js -->
+  <script async src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAUzhyYPNn45RlTGT8ExwELVE6LIXKmBWA">
+  </script>
+  <script src="js/lib/jquery.min.js">
+  </script>
+  <script async src="js/table.js">
+  </script>
+  <script async src="js/googlemap.js">
+  </script>
+  <script src="js/lib/knockout-3.2.0.js">
+  </script>
+  <script async src="js/knockout-city.js">
+  </script>
+</head>
+<body>
+  <!-- Filter search table -->
+  <form>
+    <input id="myInput" onkeyup="filter()" placeholder="Search for Cities" title="Type in a place" type="text">
+  </form>
+  <table id="myTable">
+    <thead>
+      <tr class="header">
+        <th style="width:50%">City</th>
+        <th style="width:50%">State</th>
+      </tr>
+    </thead>
+    <tbody data-bind="foreach: cityList">
+      <tr>
+        <td data-bind="text: city"></td>
+        <td data-bind="text: state"></td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Google Map -->
+  <div id="mapDiv">
+    <div id="map"></div>
+  </div>
+</body>
+</html>

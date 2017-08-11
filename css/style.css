@@ -1,0 +1,59 @@
+Filter Search Table Style*/
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url("https://png.icons8.com/search/win8/26");
+  /*Icon Credit: https://icons8.com" Icon pack by Icons8*/
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 8px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+/*Filter Search Table Style*/
+
+/*Google Map Styles*/
+#map {
+  display: block;
+  height: 100%;
+  margin: 0 5%;
+}
+
+#mapDiv {
+  height: 300px;
+  width: 100%;
+  padding-bottom: 5%;
+}
+
+/*Breakpoint for larger map height for anything larger than a typical mobile device*/
+@media screen and (min-width: 485px){
+  #mapDiv {
+    height: 500px;
+  }
+}
+
+/*Google Map Styles Ends
