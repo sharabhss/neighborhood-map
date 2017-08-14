@@ -1,20 +1,22 @@
 // location data
-var cities = [{
-  city: "Indianapolis",
-  state: "Indiana",
-}, {
-  city: "Chicago",
-  state: "Illinois",
-}, {
-  city: "Milwaukee",
-  state: "Wisconsin",
-}, {
-  city: "Detroit",
-  state: "Michigan",
-}, {
-  city: "Cincinnati",
-  state: "Ohio",
-}];
+var cities = [
+  {
+    city: "Indianapolis",
+    state: "Indiana",
+  }, {
+    city: "Chicago",
+    state: "Illinois",
+  }, {
+    city: "Milwaukee",
+    state: "Wisconsin",
+  }, {
+    city: "Detroit",
+    state: "Michigan",
+  }, {
+    city: "Cincinnati",
+    state: "Ohio",
+  }
+];
 // location class
 var City = function(data) {
   this.city = ko.observable(data.city);
@@ -44,173 +46,119 @@ for (var i = 0; i < cities.length; i++) {
 // Function is called when the page loads
 function initMap() {
   // Google map custom styles, credit: https://snazzymaps.com/style/38/shades-of-grey
-  var styles =[
+  var styles = [
     {
-        "featureType": "all",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "saturation": 36
-            },
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 40
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 16
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 20
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 17
-            },
-            {
-                "weight": 1.2
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 20
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 21
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 17
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 29
-            },
-            {
-                "weight": 0.2
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 18
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 16
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 19
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 17
-            }
-        ]
+      "featureType": "all",
+      "elementType": "labels.text.fill",
+      "stylers": [{
+        "saturation": 36
+      }, {
+        "color": "#000000"
+      }, {
+        "lightness": 40
+      }]
+    }, {
+      "featureType": "all",
+      "elementType": "labels.text.stroke",
+      "stylers": [{
+        "visibility": "on"
+      }, {
+        "color": "#000000"
+      }, {
+        "lightness": 16
+      }]
+    }, {
+      "featureType": "all",
+      "elementType": "labels.icon",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }, {
+      "featureType": "administrative",
+      "elementType": "geometry.fill",
+      "stylers": [{
+        "color": "#000000"
+      }, {
+        "lightness": 20
+      }]
+    }, {
+      "featureType": "administrative",
+      "elementType": "geometry.stroke",
+      "stylers": [{
+        "color": "#000000"
+      }, {
+        "lightness": 17
+      }, {
+        "weight": 1.2
+      }]
+    }, {
+      "featureType": "landscape",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#000000"
+      }, {
+        "lightness": 20
+      }]
+    }, {
+      "featureType": "poi",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#000000"
+      }, {
+        "lightness": 21
+      }]
+    }, {
+      "featureType": "road.highway",
+      "elementType": "geometry.fill",
+      "stylers": [{
+        "color": "#000000"
+      }, {
+        "lightness": 17
+      }]
+    }, {
+      "featureType": "road.highway",
+      "elementType": "geometry.stroke",
+      "stylers": [{
+        "color": "#000000"
+      }, {
+        "lightness": 29
+      }, {
+        "weight": 0.2
+      }]
+    }, {
+      "featureType": "road.arterial",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#000000"
+      }, {
+        "lightness": 18
+      }]
+    }, {
+      "featureType": "road.local",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#000000"
+      }, {
+        "lightness": 16
+      }]
+    }, {
+      "featureType": "transit",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#000000"
+      }, {
+        "lightness": 19
+      }]
+    }, {
+      "featureType": "water",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#000000"
+      }, {
+        "lightness": 17
+      }]
     }
-];
+  ];
   // construct a new map with all default API disabled and into the map id of the page
   map = new google.maps.Map(document.getElementById('map'), {
     styles: styles,
@@ -244,17 +192,17 @@ function initMap() {
     marker.addListener('click', function() {
       //make the animation bounce once the marker is clicked and setting timeout stop from the marker bouncing on a loop
       marker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(function(){
+      setTimeout(function() {
         marker.setAnimation(null);
       }, 700);
       //get the NYT articles for the city
       var fetchArticles = getNytArticles(cityName);
       /*send the fetched articles into the marker and call the populateInfoWindow function to show the window 
       but on a .5 second delay so that there are no too many requests error from API */
-      setTimeout(function(){
+      setTimeout(function() {
         marker.articlesArray = fetchArticles;
-        populateInfoWindow(marker, infoWindow);     
-      }, 500);
+        populateInfoWindow(marker, infoWindow);
+      }, 700);
     });
     // create two event listeners for mouseover (hover) and mouseout
     marker.addListener('mouseover', function() {
@@ -323,7 +271,6 @@ window.addEventListener('resize', function(e) {
   //update map bounds on page resize
   map.fitBounds(mapBounds);
 });
-
 // function to return an array of 5 New York Times Headlines for given city name
 function getNytArticles(city) {
   var articleList = [];
@@ -344,7 +291,7 @@ function getNytArticles(city) {
       articleList.push('<li class="article-link">' + '<a href="' + article.web_url + '">' + article.headline.main + '</a>' + '</li>');
     }
   }).fail(function(err) {
-    throw err;
+    articleList.push('<h4>Headlines could not be found at this moment</h4>');
   });
   return articleList;
 }

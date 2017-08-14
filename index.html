@@ -12,25 +12,28 @@
   <script async src="js/main.js"></script>
 </head>
 <body>
-  <!-- Search bar -->
-  <form>
-    <input id="searchInput" onkeyup="filterSearch()" placeholder="Search for Cities" title="Type in a place" type="text">
-  </form>
-  <!-- Table of locations -->
-  <table id="locationTable">
-    <thead>
-      <tr class="header">
-        <th style="width:50%">City</th>
-        <th style="width:50%">State</th>
-      </tr>
-    </thead>
-    <tbody data-bind="foreach: cityList">
-      <tr data-bind="click: $parent.setCity">
-        <td data-bind="text: city"></td>
-        <td data-bind="text: state"></td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Container for search bar and table contents -->
+  <div id="tableDiv">
+    <!-- Search bar -->
+    <form>
+      <input id="searchInput" onkeyup="filterSearch()" placeholder="Search for Cities" title="Type in a place" type="text">
+    </form>
+    <!-- Table of locations -->
+    <table id="locationTable">
+      <thead>
+        <tr class="header">
+          <th style="width:50%">City</th>
+          <th style="width:50%">State</th>
+        </tr>
+      </thead>
+      <tbody data-bind="foreach: cityList">
+        <tr data-bind="click: $parent.setCity">
+          <td data-bind="text: city"></td>
+          <td data-bind="text: state"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <!-- Google Map -->
   <div id="mapDiv">
     <div id="map"></div>

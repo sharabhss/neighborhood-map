@@ -1,6 +1,11 @@
-Filter Search Table Style*/
+/*Filter Search Table Style*/
 * {
   box-sizing: border-box;
+}
+
+#tableDiv {
+  width: 75%;
+  margin: auto;
 }
 
 #searchInput {
@@ -9,7 +14,7 @@ Filter Search Table Style*/
   background-position: 10px 10px;
   background-repeat: no-repeat;
   width: 100%;
-  font-size: 16px;
+  font-size: 18px;
   padding: 12px 20px 12px 40px;
   border: 1px solid #ddd;
   margin-bottom: 12px;
@@ -24,15 +29,15 @@ Filter Search Table Style*/
 
 #locationTable th, #locationTable td {
   text-align: left;
-  padding: 8px;
+  padding: 5px;
 }
 
 #locationTable tr {
   border-bottom: 1px solid #ddd;
 }
 
-#locationTable tr.header, #locationTable tr:hover {
-  background-color: #f1f1f1;
+#locationTable td:hover {
+  cursor: pointer;
 }
 /*Filter Search Table Style*/
 
@@ -64,6 +69,4 @@ Filter Search Table Style*/
   margin: auto;
   color: navy;
 }
-
-
 /*InfoWindow NYT Articles Styles Ends*/
