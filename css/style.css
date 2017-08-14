@@ -3,7 +3,7 @@ Filter Search Table Style*/
   box-sizing: border-box;
 }
 
-#myInput {
+#searchInput {
   background-image: url("https://png.icons8.com/search/win8/26");
   /*Icon Credit: https://icons8.com" Icon pack by Icons8*/
   background-position: 10px 10px;
@@ -15,23 +15,23 @@ Filter Search Table Style*/
   margin-bottom: 12px;
 }
 
-#myTable {
+#locationTable {
   border-collapse: collapse;
   width: 100%;
   border: 1px solid #ddd;
   font-size: 16px;
 }
 
-#myTable th, #myTable td {
+#locationTable th, #locationTable td {
   text-align: left;
   padding: 8px;
 }
 
-#myTable tr {
+#locationTable tr {
   border-bottom: 1px solid #ddd;
 }
 
-#myTable tr.header, #myTable tr:hover {
+#locationTable tr.header, #locationTable tr:hover {
   background-color: #f1f1f1;
 }
 /*Filter Search Table Style*/

@@ -12,14 +12,15 @@
     var defaultMarker = makeMarker("FF0000");
     // make maker with color yellow for mouse hover
     var hoverMaker = makeMarker("FFFF00");
+    // this function reads search results and creates pins from Google Places. placeData contains objects with info about a single location
     // create an infoWindow
     var infoWindow = new google.maps.InfoWindow();
-    // this function reads search results and creates pins from Google Places. placeData contains objects with info about a single location
     function createMapMarker(placeData) {
       // following data are local variables for where to place the map marker from placeData object
       var lat = placeData.geometry.location.lat();
       var lon = placeData.geometry.location.lng();
       var name = placeData.formatted_address;
+      var cityName = name.split(',')[0];
 
       var bounds = window.mapBounds;
       // additional data for marker
@@ -29,7 +30,8 @@
         title: name,
         animation: google.maps.Animation.DROP,
         icon: defaultMarker,
-        id: i
+        id: i,
+        articlesArray: getNytArticles(cityName)
       });
       // create onclick event to open infoWindow for each marker
       marker.addListener('click', function() {
@@ -63,23 +65,13 @@
         infoWindow.addListener('closeclick', function() {
           infoWindow.marker = null;
         });
-        // TODO: ADD NYT or Foursquare API to populate infoWindow and have error handler
-        var markerCityIndex;
-        for (var i = 0; i < cities.length; i++) {
-          if (marker.title.split(',')[0] === cities[i].city) {
-            markerCityIndex = i;
-          }
-        }
-
-        //var contentString = '<div><h2>' + marker.title + '</h2></div>' + '<div class="nytimes-container">' + '<h4 id="nytimes-header">New York Times Headlines</h4><ul id="nytimes-articles" class="article-list">' + cities[markerCityIndex].articleList + '</ul></div>';
-        var contentString = '<div><h2>' + marker.title + '</h2></div>' + '<div class="nytimes-container">' + '<h4 id="nytimes-header">New York Times Headlines</h4><ul id="nytimes-articles" class="article-list">' + articleListArray + '</ul></div>';
+        // create the content for infowindow and set it to it's setContent
+        var contentString = '<div><h2>' + marker.title + '</h2></div>' + '<div class="nytimes-container">' + '<h4 id="nytimes-header">New York Times Headlines</h4><ul id="nytimes-articles" class="article-list">' + marker.articlesArray + '</ul></div>';
         infoWindow.setContent(contentString);
         // open infoWindow with marker is clicked
         infoWindow.open(map, marker);
       }
     }
-      var articleListArray = getNytArticles("Milwaukee");
-
     // function to get 5 New York Times Headlines for given city name
     function getNytArticles(city) {
     var articleList = [];

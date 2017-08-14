@@ -10,19 +10,18 @@
   </script>
   <script src="js/lib/jquery.min.js">
   </script>
-  <script async src="js/googlemap.js">
-  </script>
   <script src="js/lib/knockout-3.2.0.js">
   </script>
-  <script async src="js/knockout-city.js">
+  <script async src="js/main.js">
   </script>
 </head>
 <body>
-  <!-- Filter search table -->
+  <!-- Search bar -->
   <form>
-    <input id="myInput" onkeyup="filter()" placeholder="Search for Cities" title="Type in a place" type="text">
+    <input id="searchInput" onkeyup="filterSearch()" placeholder="Search for Cities" title="Type in a place" type="text">
   </form>
-  <table id="myTable">
+  <!-- Table of locations -->
+  <table id="locationTable">
     <thead>
       <tr class="header">
         <th style="width:50%">City</th>
@@ -30,12 +29,17 @@
       </tr>
     </thead>
     <tbody data-bind="foreach: cityList">
-      <tr>
+      <!-- <tr data-bind="click: $parent.setCity"> -->
+      <tr data-bind="click: $parent.infoWindowOnClick">
         <td data-bind="text: city"></td>
         <td data-bind="text: state"></td>
       </tr>
     </tbody>
   </table>
+  <!-- Test -->
+  <!-- <div data-bind="with: currentCity">
+    <h2 data-bind="text: city"></h2>
+  </div> -->
   <!-- Google Map -->
   <div id="mapDiv">
     <div id="map"></div>
