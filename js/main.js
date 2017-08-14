@@ -220,10 +220,9 @@ function initMap() {
   var defaultMarker = makeMarker("FF0000");
   // make maker with color yellow for mouse hover
   var hoverMaker = makeMarker("FFFF00");
-  // this function reads search results and creates pins from Google Places. placeData contains objects with info about a single location
   // create an infoWindow
   var infoWindow = new google.maps.InfoWindow();
-
+  // this function reads search results and creates markers from Google Places. placeData contains objects with info about a single location
   function createMapMarker(placeData) {
     // following data are local variables for where to place the map marker from placeData object
     var lat = placeData.geometry.location.lat();
@@ -239,11 +238,23 @@ function initMap() {
       animation: google.maps.Animation.DROP,
       icon: defaultMarker,
       id: i,
-      articlesArray: getNytArticles(cityName)
+      articlesArray: []
     });
     // create onclick event to open infoWindow for each marker
     marker.addListener('click', function() {
-      populateInfoWindow(this, infoWindow);
+      //make the animation bounce once the marker is clicked and setting timeout stop from the marker bouncing on a loop
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function(){
+        marker.setAnimation(null);
+      }, 700);
+      //get the NYT articles for the city
+      var fetchArticles = getNytArticles(cityName);
+      /*send the fetched articles into the marker and call the populateInfoWindow function to show the window 
+      but on a .5 second delay so that there are no too many requests error from API */
+      setTimeout(function(){
+        marker.articlesArray = fetchArticles;
+        populateInfoWindow(marker, infoWindow);     
+      }, 500);
     });
     // create two event listeners for mouseover (hover) and mouseout
     marker.addListener('mouseover', function() {
