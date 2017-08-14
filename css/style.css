@@ -39,7 +39,6 @@
 #locationTable td:hover {
   cursor: pointer;
 }
-/*Filter Search Table Style*/
 
 /*Google Map Styles*/
 #map {
@@ -54,14 +53,13 @@
   padding-bottom: 5%;
 }
 
+
 /*Breakpoint for larger map height for anything larger than a typical mobile device*/
-@media screen and (min-width: 485px){
+@media screen and (min-width: 485px) {
   #mapDiv {
     height: 500px;
   }
 }
-
-/*Google Map Styles Ends*/
 
 /*InfoWindow NYT Articles Styles Starts*/
 .article-list {
@@ -69,4 +67,3 @@
   margin: auto;
   color: navy;
 }
-/*InfoWindow NYT Articles Styles Ends*/
