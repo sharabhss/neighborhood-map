@@ -31,35 +31,186 @@ var ViewModel = function() {
   this.setCity = function(clickedCity) {
     self.currentCity(clickedCity);
   };
-  this.infoWindowOnClick = function() {}
 };
 // viewmodel to create everything
 ko.applyBindings(new ViewModel());
-/* fucntion to do filter search of the table of locations called by the search bar form */
-function filterSearch() {
-  var input, filter, table, tr, td, i;
-  input = document.getElementById("searchInput"); //get the typed input from the search bar element
-  filter = input.value.toUpperCase(); //format the typed input for search
-  table = document.getElementById("locationTable"); //get the table element for comparision
-  tr = table.getElementsByTagName("tr"); //get the table row element to loop through
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0]; //we only need to go through the table data so get td element
-    //do the comparision and only display the ones that match
-    if (td) {
-      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
 /*Google Map*/
 var map; // declares a global map variable
+// locations is an array of location strings fetched from cities object for maps
+var locations = [];
+for (var i = 0; i < cities.length; i++) {
+  locations.push(cities[i].city + ", " + cities[i].state);
+}
 // Function is called when the page loads
 function initMap() {
-  // if you want different map style, populate the following
-  var styles = [];
+  // Google map custom styles, credit: https://snazzymaps.com/style/38/shades-of-grey
+  var styles =[
+    {
+        "featureType": "all",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "saturation": 36
+            },
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 40
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 20
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 17
+            },
+            {
+                "weight": 1.2
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 20
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 21
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 17
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 29
+            },
+            {
+                "weight": 0.2
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 18
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 19
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 17
+            }
+        ]
+    }
+];
   // construct a new map with all default API disabled and into the map id of the page
   map = new google.maps.Map(document.getElementById('map'), {
     styles: styles,
@@ -129,30 +280,6 @@ function initMap() {
       infoWindow.open(map, marker);
     }
   }
-  // function to get 5 New York Times Headlines for given city name
-  function getNytArticles(city) {
-    var articleList = [];
-    var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-    url += '?' + $.param({
-      'q': city,
-      'sort': "newest",
-      'fl': "web_url, headline",
-      'api-key': "de208adf347547fb9eebe7a46a8f3695"
-    });
-    $.ajax({
-      url: url,
-      method: 'GET',
-    }).done(function(result) {
-      var articles = result.response.docs;
-      for (var i = 0; i < 5; i++) {
-        var article = articles[i];
-        articleList.push('<li class="article-link">' + '<a href="' + article.web_url + '">' + article.headline.main + '</a>' + '</li>');
-      };
-    }).fail(function(err) {
-      throw err;
-    });
-    return articleList;
-  };
   // function to make sure there are search results for locations and creates a marker for each location
   function callback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -175,11 +302,6 @@ function initMap() {
   }
   // Sets the boundaries of the map based on pin locations
   window.mapBounds = new google.maps.LatLngBounds();
-  // locations is an array of location strings fetched from cities object
-  var locations = [];
-  for (var i = 0; i < cities.length; i++) {
-    locations.push(cities[i].city + ", " + cities[i].state);
-  }
   // create a pin for each location on the map
   pinPoster(locations);
 }
@@ -190,3 +312,28 @@ window.addEventListener('resize', function(e) {
   //update map bounds on page resize
   map.fitBounds(mapBounds);
 });
+
+// function to return an array of 5 New York Times Headlines for given city name
+function getNytArticles(city) {
+  var articleList = [];
+  var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+  url += '?' + $.param({
+    'q': city,
+    'sort': "newest",
+    'fl': "web_url, headline",
+    'api-key': "de208adf347547fb9eebe7a46a8f3695"
+  });
+  $.ajax({
+    url: url,
+    method: 'GET',
+  }).done(function(result) {
+    var articles = result.response.docs;
+    for (var i = 0; i < 5; i++) {
+      var article = articles[i];
+      articleList.push('<li class="article-link">' + '<a href="' + article.web_url + '">' + article.headline.main + '</a>' + '</li>');
+    }
+  }).fail(function(err) {
+    throw err;
+  });
+  return articleList;
+}

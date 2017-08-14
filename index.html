@@ -5,15 +5,6 @@
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>Neighborhood Map</title>
   <link href="css/style.css" rel="stylesheet">
-  <!-- Link google api, jquery CDN, table js, and google map implementation js -->
-  <script async src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAUzhyYPNn45RlTGT8ExwELVE6LIXKmBWA">
-  </script>
-  <script src="js/lib/jquery.min.js">
-  </script>
-  <script src="js/lib/knockout-3.2.0.js">
-  </script>
-  <script async src="js/main.js">
-  </script>
 </head>
 <body>
   <!-- Search bar -->
@@ -29,20 +20,41 @@
       </tr>
     </thead>
     <tbody data-bind="foreach: cityList">
-      <!-- <tr data-bind="click: $parent.setCity"> -->
-      <tr data-bind="click: $parent.infoWindowOnClick">
+      <tr data-bind="click: $parent.setCity">
         <td data-bind="text: city"></td>
         <td data-bind="text: state"></td>
       </tr>
     </tbody>
   </table>
-  <!-- Test -->
-  <!-- <div data-bind="with: currentCity">
-    <h2 data-bind="text: city"></h2>
-  </div> -->
   <!-- Google Map -->
   <div id="mapDiv">
     <div id="map"></div>
   </div>
+  <!-- Link google api, jquery CDN, table js, and google map implementation js -->
+  <script async src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAUzhyYPNn45RlTGT8ExwELVE6LIXKmBWA"></script>
+  <script src="js/lib/jquery.min.js"></script>
+  <script src="js/lib/knockout-3.2.0.js"></script>
+  <script async src="js/main.js"></script>
+  <!--Filter search of the table of locations called by the search bar form -->
+  <script>
+    function filterSearch() {
+      var input, filter, table, tr, td, i;
+      input = document.getElementById("searchInput"); //get the typed input from the search bar element
+      filter = input.value.toUpperCase(); //format the typed input for search
+      table = document.getElementById("locationTable"); //get the table element for comparision
+      tr = table.getElementsByTagName("tr"); //get the table row element to loop through
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0]; //we only need to go through the table data so get td element
+        //do the comparision and only display the ones that match
+        if (td) {
+          if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
 </body>
 </html>
