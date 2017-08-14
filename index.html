@@ -41,13 +41,12 @@
   <!--Filter search of the table of locations called by the search bar form -->
   <script>
     function filterSearch() {
-      var input, filter, table, tr, td, i;
-      input = document.getElementById("searchInput"); //get the typed input from the search bar element
-      filter = input.value.toUpperCase(); //format the typed input for search
-      table = document.getElementById("locationTable"); //get the table element for comparision
-      tr = table.getElementsByTagName("tr"); //get the table row element to loop through
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0]; //we only need to go through the table data so get td element
+      var input = document.getElementById("searchInput"); //get the typed input from the search bar element
+      var filter = input.value.toUpperCase(); //format the typed input for search
+      var table = document.getElementById("locationTable"); //get the table element for comparision
+      var tr = table.getElementsByTagName("tr"); //get the table row element to loop through
+      for (var i = 0; i < tr.length; i++) {
+        var td = tr[i].getElementsByTagName("td")[0]; //we only need to go through the table data so get td element
         //do the comparision and only display the ones that match
         if (td) {
           if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
