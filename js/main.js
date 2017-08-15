@@ -19,8 +19,8 @@ var cities = [
 ];
 // location class
 var City = function(data) {
-  this.city = ko.observable(data.city);
-  this.state = ko.observable(data.state);
+  this.city = data.city;
+  this.state = data.state;
 };
 // knockout viewmodel to handle data
 var ViewModel = function() {
@@ -218,7 +218,7 @@ function initMap() {
   }
   // function to make markers given the color of marker wanted
   function makeMarker(markerColor) {
-    var markerImage = new google.maps.MarkerImage('http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor + '|40|_|%E2%80%A2', new google.maps.Size(31, 50), new google.maps.Point(0, 0), new google.maps.Point(15, 50), new google.maps.Size(31, 50));
+    var markerImage = new google.maps.MarkerImage('https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor + '|40|_|%E2%80%A2', new google.maps.Size(31, 50), new google.maps.Point(0, 0), new google.maps.Point(15, 50), new google.maps.Size(31, 50));
     return markerImage;
   }
   // function to populate the infoWindom for the clicked marker. Only one marker is open at one time
@@ -244,6 +244,9 @@ function initMap() {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       createMapMarker(results[0]);
     }
+    else {
+      alert("No search results could be found for given location, try again");
+    }
   }
   // function to search for location results given an array of location names from Google Places
   function pinPoster(locations) {
@@ -264,8 +267,6 @@ function initMap() {
   // create a pin for each location on the map
   pinPoster(locations);
 }
-//Calls the initMap() function when the page loads
-window.addEventListener('load', initMap);
 //adjust map size depending on the window size
 window.addEventListener('resize', function(e) {
   //update map bounds on page resize
@@ -294,4 +295,8 @@ function getNytArticles(city) {
     articleList.push('<h4>Headlines could not be found at this moment</h4>');
   });
   return articleList;
+}
+// error message to user if the map could not be loaded
+function gMapsError(){
+  alert("Map could not load at this time, try again later.")
 }
