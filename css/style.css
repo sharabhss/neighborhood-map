@@ -30,6 +30,12 @@
 #locationTable th, #locationTable td {
   text-align: left;
   padding: 5px;
+  border: 1px solid #ddd;
+
+}
+
+#locationTable th {
+  width: 50%;
 }
 
 #locationTable tr {
