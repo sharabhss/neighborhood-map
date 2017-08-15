@@ -4,12 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>Neighborhood Map</title>
-  <link href="css/style.min.css" rel="stylesheet">
-  <!-- Link google api, jquery CDN, table js, and google map implementation js -->
-  <script async src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAUzhyYPNn45RlTGT8ExwELVE6LIXKmBWA"></script>
-  <script src="js/lib/jquery.min.js"></script>
-  <script src="js/lib/knockout-3.2.0.js"></script>
-  <script async src="js/main.min.js"></script>
+  <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
   <!-- Container for search bar and table contents -->
@@ -22,8 +17,8 @@
     <table id="locationTable">
       <thead>
         <tr class="header">
-          <th style="width:50%">City</th>
-          <th style="width:50%">State</th>
+          <th>City</th>
+          <th>State</th>
         </tr>
       </thead>
       <tbody data-bind="foreach: cityList">
@@ -58,5 +53,10 @@
       }
     }
   </script>
+  <!-- Link google api, jquery CDN, table js, and google map implementation js -->
+  <script async src="js/lib/jquery.min.js"></script>
+  <script async src="js/lib/knockout-3.2.0.js"></script>
+  <script async src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAUzhyYPNn45RlTGT8ExwELVE6LIXKmBWA&callback=initMap" onerror="gMapsError()"></script>
+  <script async src="js/main.js"></script>
 </body>
 </html>
