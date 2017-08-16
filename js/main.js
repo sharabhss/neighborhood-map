@@ -27,10 +27,10 @@ var map;
 // Where everything that goes to the page is rendered
 var ViewModel = function() {
   var self = this;
-  // for filterSearch function later
+  // for filterSearch, this observes what is being inputed into the search bar
   this.query = ko.observable("");
   // list of markers created will be stored here
-  this.markers = [];
+  this.markersArray = [];
   // make default marker with color red and custom size
   var markerIcon = new google.maps.MarkerImage('https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|FF0000|40|_|%E2%80%A2', new google.maps.Size(31, 50), new google.maps.Point(0, 0), new google.maps.Point(15, 50), new google.maps.Size(31, 50));
   // make hover marker with color yellow and custom size
@@ -45,6 +45,7 @@ var ViewModel = function() {
       // reset the marker property if the infoWindow is closed
       infoWindow.addListener('closeclick', function() {
         infoWindow.marker = null;
+        //change the marker color back to default
         marker.setIcon(markerIcon);
       });
       //Call NYT API for 5 headlines for marker.title city and store them in an array, which is displayed in the infoWindow
@@ -68,20 +69,23 @@ var ViewModel = function() {
       }).fail(function(err) {
         articleList.push('<h4>Headlines could not be found at this moment</h4>');
       });
-      //setTimeout here gives the api time to load it to infoWindow and than open
+      //setTimeout here gives the api time to load it to infoWindow and than open the window
       setTimeout(function() {
         // create the content for infowindow and set it to it's setContent
         var contentString = '<div><h2>' + marker.title + '</h2></div>' + '<div class="nytimes-container">' + '<h4 id="nytimes-header">New York Times Headlines</h4><ul id="nytimes-articles" class="article-list">' + articleList + '</ul></div>';
         infoWindow.setContent(contentString);
-        // open infoWindow with marker is clicked
+        // open infoWindow when marker is clicked
         infoWindow.open(map, marker);
       }, 700);
     }
   };
   //populate marker onto map when clicked either on list or marker on map
   this.openMarker = function() {
+    // call function to open infoWindow when clicked
     self.populateInfoWindow(this, self.infoWindow);
+    //animate marker with drop when clicked
     this.setAnimation(google.maps.Animation.DROP);
+    //change marker when clicked
     this.setIcon(markerIconHover);
   };
   // start the map creation
@@ -206,7 +210,7 @@ var ViewModel = function() {
       center: new google.maps.LatLng(41.7684, -86.1581),
       zoom: 6
     });
-    // create infoWindow
+    // initialize new infoWindow
     this.infoWindow = new google.maps.InfoWindow();
     // create and store makers for locations inside cities array of objects
     for (var i = 0; i < cities.length; i++) {
@@ -226,7 +230,7 @@ var ViewModel = function() {
       //set the map of the marker to the working map
       this.marker.setMap(map);
       //store the marker in the markers array
-      this.markers.push(this.marker);
+      this.markersArray.push(this.marker);
       //On click, get the infowindow to open on
       this.marker.addListener('click', self.openMarker);
       // create two event listeners for mouseover (hover) and mouseout
@@ -236,20 +240,20 @@ var ViewModel = function() {
       this.marker.addListener('mouseout', function() {
         this.setIcon(markerIcon);
       });
-    };
-  }
+    }
+  };
   // initialize the map on to the window
   this.initMap();
   //filter serach for cities and markers
   this.filterSearch = ko.computed(function() {
     var output = [];
-    for (var i = 0; i < this.markers.length; i++) {
-      var cityMarker = this.markers[i];
+    for (var i = 0; i < this.markersArray.length; i++) {
+      var cityMarker = this.markersArray[i];
       if (cityMarker.title.toUpperCase().includes(this.query().toUpperCase())) {
         output.push(cityMarker);
-        this.markers[i].setVisible(true);
+        this.markersArray[i].setVisible(true);
       } else {
-        this.markers[i].setVisible(false);
+        this.markersArray[i].setVisible(false);
       }
     }
     return output;
@@ -259,7 +263,6 @@ var ViewModel = function() {
 function gMapsError() {
   alert("Map could not load at this time, try again later.");
 }
-
 //Google Maps link calls this function as callback and this function applies the Knockout ViewModel
 function initAll() {
   // viewmodel to create everything
