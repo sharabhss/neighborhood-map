@@ -22,45 +22,14 @@ var cities = [{
 }];
 // global map variable
 var map;
+// Where everything that goes to the page is rendered
 var ViewModel = function() {
   var self = this;
+  // for filterSearch function later
   this.query = ko.observable("");
+  // list of markers created will be stored here
   this.markers = [];
-  this.initMap = function() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      styles: styles,
-      center: new google.maps.LatLng(41.7684, -86.1581),
-      zoom: 6
-    });
-    // make default marker with color red
-    var markerIcon = new google.maps.MarkerImage('https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|FF0000|40|_|%E2%80%A2', new google.maps.Size(31, 50), new google.maps.Point(0, 0), new google.maps.Point(15, 50), new google.maps.Size(31, 50));
-    // create infoWindow
-    this.infoWindow = new google.maps.InfoWindow();
-    for (var i = 0; i < cities.length; i++) {
-      //inititialize markers
-      this.title = cities[i].title;
-      this.lat = cities[i].lat;
-      this.lng = cities[i].lng;
-      //create google maps marker
-      this.marker = new google.maps.Marker({
-        map: map,
-        position: {
-          lat: this.lat,
-          lng: this.lng
-        },
-        title: this.title,
-        lat: this.lat,
-        lng: this.lng,
-        icon: markerIcon,
-        id: i,
-        animation: google.maps.Animation.DROP
-      });
-      this.marker.setMap(map);
-      this.markers.push(this.marker);
-      this.marker.addListener('click', self.populateMarker);
-    }
-  };
-  this.initMap();
+  //Create infowindow and its contents through 3rd party API (NYT)
   this.populateInfoWindow = function(marker, infoWindow) {
     // check if infoWindow is already open on this marker
     if (infoWindow.marker != marker) {
@@ -71,7 +40,7 @@ var ViewModel = function() {
       infoWindow.addListener('closeclick', function() {
         infoWindow.marker = null;
       });
-      //var nytList = getNytArticles(marker.title)
+      //Call NYT API for 5 headlines for marker.title city and store them in an array, which is displayed in the infoWindow
       var articleList = [];
       var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
       url += '?' + $.param({
@@ -92,6 +61,7 @@ var ViewModel = function() {
       }).fail(function(err) {
         articleList.push('<h4>Headlines could not be found at this moment</h4>');
       });
+      //setTimeout here gives the api time to load it to infoWindow and than open
       setTimeout(function() {
         // create the content for infowindow and set it to it's setContent
         var contentString = '<div><h2>' + marker.title + '</h2></div>' + '<div class="nytimes-container">' + '<h4 id="nytimes-header">New York Times Headlines</h4><ul id="nytimes-articles" class="article-list">' + articleList + '</ul></div>';
@@ -106,13 +76,164 @@ var ViewModel = function() {
     self.populateInfoWindow(this, self.infoWindow);
     this.setAnimation(google.maps.Animation.DROP);
   };
+  // start the map creation
+  this.initMap = function() {
+    // Google map custom styles, credit: https://snazzymaps.com/style/38/shades-of-grey
+    var styles = [
+      {
+        "featureType": "all",
+        "elementType": "labels.text.fill",
+        "stylers": [{
+          "saturation": 36
+        }, {
+          "color": "#000000"
+        }, {
+          "lightness": 40
+        }]
+      }, {
+        "featureType": "all",
+        "elementType": "labels.text.stroke",
+        "stylers": [{
+          "visibility": "on"
+        }, {
+          "color": "#000000"
+        }, {
+          "lightness": 16
+        }]
+      }, {
+        "featureType": "all",
+        "elementType": "labels.icon",
+        "stylers": [{
+          "visibility": "off"
+        }]
+      }, {
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
+        "stylers": [{
+          "color": "#000000"
+        }, {
+          "lightness": 20
+        }]
+      }, {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [{
+          "color": "#000000"
+        }, {
+          "lightness": 17
+        }, {
+          "weight": 1.2
+        }]
+      }, {
+        "featureType": "landscape",
+        "elementType": "geometry",
+        "stylers": [{
+          "color": "#000000"
+        }, {
+          "lightness": 20
+        }]
+      }, {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [{
+          "color": "#000000"
+        }, {
+          "lightness": 21
+        }]
+      }, {
+        "featureType": "road.highway",
+        "elementType": "geometry.fill",
+        "stylers": [{
+          "color": "#000000"
+        }, {
+          "lightness": 17
+        }]
+      }, {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [{
+          "color": "#000000"
+        }, {
+          "lightness": 29
+        }, {
+          "weight": 0.2
+        }]
+      }, {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [{
+          "color": "#000000"
+        }, {
+          "lightness": 18
+        }]
+      }, {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [{
+          "color": "#000000"
+        }, {
+          "lightness": 16
+        }]
+      }, {
+        "featureType": "transit",
+        "elementType": "geometry",
+        "stylers": [{
+          "color": "#000000"
+        }, {
+          "lightness": 19
+        }]
+      }, {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [{
+          "color": "#000000"
+        }, {
+          "lightness": 17
+        }]
+      }
+    ];
+    //create the map by placing it inside the 'map' id div and by giving it default start points
+    map = new google.maps.Map(document.getElementById('map'), {
+      styles: styles,
+      center: new google.maps.LatLng(41.7684, -86.1581),
+      zoom: 6
+    });
+    // make default marker with color red and custom size
+    var markerIcon = new google.maps.MarkerImage('https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|FF0000|40|_|%E2%80%A2', new google.maps.Size(31, 50), new google.maps.Point(0, 0), new google.maps.Point(15, 50), new google.maps.Size(31, 50));
+    // create infoWindow
+    this.infoWindow = new google.maps.InfoWindow();
+    // create and store makers for locations inside cities array of objects
+    for (var i = 0; i < cities.length; i++) {
+      //get info about markers
+      this.title = cities[i].title;
+      this.lat = cities[i].lat;
+      this.lng = cities[i].lng;
+      //create google maps marker
+      this.marker = new google.maps.Marker({
+        map: map,
+        position: {lat: this.lat, lng: this.lng},
+        title: this.title,
+        icon: markerIcon,
+        id: i,
+        animation: google.maps.Animation.DROP
+      });
+      //set the map of the marker to the working map
+      this.marker.setMap(map);
+      //store the marker in the markers array
+      this.markers.push(this.marker);
+      //On click, get the infowindow to open on
+      this.marker.addListener('click', self.populateMarker);
+    }
+  };
+  // initialize the map on to the window
+  this.initMap();
   //filter serach for cities and markers
   this.filterSearch = ko.computed(function() {
     var output = [];
     for (var i = 0; i < this.markers.length; i++) {
-      var markerCity = this.markers[i];
-      if (markerCity.title.toLowerCase().includes(this.query().toLowerCase())) {
-        output.push(markerCity);
+      var cityMarker = this.markers[i];
+      if (cityMarker.title.toUpperCase().includes(this.query().toUpperCase())) {
+        output.push(cityMarker);
         this.markers[i].setVisible(true);
       } else {
         this.markers[i].setVisible(false);
@@ -126,118 +247,8 @@ function gMapsError() {
   alert("Map could not load at this time, try again later.");
 }
 
+//Google Maps link calls this function as callback and this function applies the Knockout ViewModel
 function initApp() {
   // viewmodel to create everything
   ko.applyBindings(new ViewModel());
 }
-var styles = [{
-  "featureType": "all",
-  "elementType": "labels.text.fill",
-  "stylers": [{
-    "saturation": 36
-  }, {
-    "color": "#000000"
-  }, {
-    "lightness": 40
-  }]
-}, {
-  "featureType": "all",
-  "elementType": "labels.text.stroke",
-  "stylers": [{
-    "visibility": "on"
-  }, {
-    "color": "#000000"
-  }, {
-    "lightness": 16
-  }]
-}, {
-  "featureType": "all",
-  "elementType": "labels.icon",
-  "stylers": [{
-    "visibility": "off"
-  }]
-}, {
-  "featureType": "administrative",
-  "elementType": "geometry.fill",
-  "stylers": [{
-    "color": "#000000"
-  }, {
-    "lightness": 20
-  }]
-}, {
-  "featureType": "administrative",
-  "elementType": "geometry.stroke",
-  "stylers": [{
-    "color": "#000000"
-  }, {
-    "lightness": 17
-  }, {
-    "weight": 1.2
-  }]
-}, {
-  "featureType": "landscape",
-  "elementType": "geometry",
-  "stylers": [{
-    "color": "#000000"
-  }, {
-    "lightness": 20
-  }]
-}, {
-  "featureType": "poi",
-  "elementType": "geometry",
-  "stylers": [{
-    "color": "#000000"
-  }, {
-    "lightness": 21
-  }]
-}, {
-  "featureType": "road.highway",
-  "elementType": "geometry.fill",
-  "stylers": [{
-    "color": "#000000"
-  }, {
-    "lightness": 17
-  }]
-}, {
-  "featureType": "road.highway",
-  "elementType": "geometry.stroke",
-  "stylers": [{
-    "color": "#000000"
-  }, {
-    "lightness": 29
-  }, {
-    "weight": 0.2
-  }]
-}, {
-  "featureType": "road.arterial",
-  "elementType": "geometry",
-  "stylers": [{
-    "color": "#000000"
-  }, {
-    "lightness": 18
-  }]
-}, {
-  "featureType": "road.local",
-  "elementType": "geometry",
-  "stylers": [{
-    "color": "#000000"
-  }, {
-    "lightness": 16
-  }]
-}, {
-  "featureType": "transit",
-  "elementType": "geometry",
-  "stylers": [{
-    "color": "#000000"
-  }, {
-    "lightness": 19
-  }]
-}, {
-  "featureType": "water",
-  "elementType": "geometry",
-  "stylers": [{
-    "color": "#000000"
-  }, {
-    "lightness": 17
-  }]
-}];
