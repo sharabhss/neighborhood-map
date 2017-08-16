@@ -20,7 +20,7 @@
         </tr>
       </thead>
       <tbody data-bind="foreach: filterSearch">
-        <tr data-bind="click: $parent.populateMarker">
+        <tr data-bind="click: $parent.openMarker">
           <td data-bind="text: title"></td>
         </tr>
       </tbody>
@@ -33,7 +33,7 @@
   </script> 
   <script async src="js/lib/knockout-3.2.0.js">
   </script> 
-  <script async onerror="gMapsError()" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAUzhyYPNn45RlTGT8ExwELVE6LIXKmBWA&callback=initApp">
+  <script async onerror="gMapsError()" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAUzhyYPNn45RlTGT8ExwELVE6LIXKmBWA&callback=initAll">
   </script> 
   <script async src="js/main.js">
   </script>

@@ -1,25 +1,27 @@
 // location data
-var cities = [{
-  title: "Indianapolis",
-  lat: 39.7684,
-  lng: -86.1581
-}, {
-  title: "Chicago",
-  lat: 41.8781,
-  lng: -87.6298
-}, {
-  title: "Milwaukee",
-  lat: 43.0389,
-  lng: -87.9065
-}, {
-  title: "Detroit",
-  lat: 42.3314,
-  lng: -83.0458
-}, {
-  title: "Cincinnati",
-  lat: 39.1031,
-  lng: -84.5120
-}];
+var cities = [
+  {
+    title: "Indianapolis",
+    lat: 39.7684,
+    lng: -86.1581
+  }, {
+    title: "Chicago",
+    lat: 41.8781,
+    lng: -87.6298
+  }, {
+    title: "Milwaukee",
+    lat: 43.0389,
+    lng: -87.9065
+  }, {
+    title: "Detroit",
+    lat: 42.3314,
+    lng: -83.0458
+  }, {
+    title: "Cincinnati",
+    lat: 39.1031,
+    lng: -84.5120
+  }
+];
 // global map variable
 var map;
 // Where everything that goes to the page is rendered
@@ -29,6 +31,10 @@ var ViewModel = function() {
   this.query = ko.observable("");
   // list of markers created will be stored here
   this.markers = [];
+  // make default marker with color red and custom size
+  var markerIcon = new google.maps.MarkerImage('https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|FF0000|40|_|%E2%80%A2', new google.maps.Size(31, 50), new google.maps.Point(0, 0), new google.maps.Point(15, 50), new google.maps.Size(31, 50));
+  // make hover marker with color yellow and custom size
+  var markerIconHover = new google.maps.MarkerImage('https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|FFFF00|40|_|%E2%80%A2', new google.maps.Size(31, 50), new google.maps.Point(0, 0), new google.maps.Point(15, 50), new google.maps.Size(31, 50));
   //Create infowindow and its contents through 3rd party API (NYT)
   this.populateInfoWindow = function(marker, infoWindow) {
     // check if infoWindow is already open on this marker
@@ -39,6 +45,7 @@ var ViewModel = function() {
       // reset the marker property if the infoWindow is closed
       infoWindow.addListener('closeclick', function() {
         infoWindow.marker = null;
+        marker.setIcon(markerIcon);
       });
       //Call NYT API for 5 headlines for marker.title city and store them in an array, which is displayed in the infoWindow
       var articleList = [];
@@ -71,10 +78,11 @@ var ViewModel = function() {
       }, 700);
     }
   };
-  //populate marker onto map
-  this.populateMarker = function() {
+  //populate marker onto map when clicked either on list or marker on map
+  this.openMarker = function() {
     self.populateInfoWindow(this, self.infoWindow);
     this.setAnimation(google.maps.Animation.DROP);
+    this.setIcon(markerIconHover);
   };
   // start the map creation
   this.initMap = function() {
@@ -198,8 +206,6 @@ var ViewModel = function() {
       center: new google.maps.LatLng(41.7684, -86.1581),
       zoom: 6
     });
-    // make default marker with color red and custom size
-    var markerIcon = new google.maps.MarkerImage('https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|FF0000|40|_|%E2%80%A2', new google.maps.Size(31, 50), new google.maps.Point(0, 0), new google.maps.Point(15, 50), new google.maps.Size(31, 50));
     // create infoWindow
     this.infoWindow = new google.maps.InfoWindow();
     // create and store makers for locations inside cities array of objects
@@ -222,9 +228,16 @@ var ViewModel = function() {
       //store the marker in the markers array
       this.markers.push(this.marker);
       //On click, get the infowindow to open on
-      this.marker.addListener('click', self.populateMarker);
-    }
-  };
+      this.marker.addListener('click', self.openMarker);
+      // create two event listeners for mouseover (hover) and mouseout
+      this.marker.addListener('mouseover', function() {
+        this.setIcon(markerIconHover);
+      });
+      this.marker.addListener('mouseout', function() {
+        this.setIcon(markerIcon);
+      });
+    };
+  }
   // initialize the map on to the window
   this.initMap();
   //filter serach for cities and markers
@@ -248,7 +261,7 @@ function gMapsError() {
 }
 
 //Google Maps link calls this function as callback and this function applies the Knockout ViewModel
-function initApp() {
+function initAll() {
   // viewmodel to create everything
   ko.applyBindings(new ViewModel());
 }
