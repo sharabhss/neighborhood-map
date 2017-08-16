@@ -86,7 +86,15 @@ var ViewModel = function() {
     //animate marker with drop when clicked
     this.setAnimation(google.maps.Animation.DROP);
     //change marker when clicked
+    this.mouseoverMarker();
+  };
+  //function to change marker to hover marker
+  this.mouseoverMarker = function(){
     this.setIcon(markerIconHover);
+  };
+  //function to change marker to default marker
+  this.mouseoutMarker = function(){
+    this.setIcon(markerIcon);
   };
   // start the map creation
   this.initMap = function() {
@@ -234,12 +242,8 @@ var ViewModel = function() {
       //On click, get the infowindow to open on
       this.marker.addListener('click', self.openMarker);
       // create two event listeners for mouseover (hover) and mouseout
-      this.marker.addListener('mouseover', function() {
-        this.setIcon(markerIconHover);
-      });
-      this.marker.addListener('mouseout', function() {
-        this.setIcon(markerIcon);
-      });
+      this.marker.addListener('mouseover', self.mouseoverMarker);
+      this.marker.addListener('mouseout', self.mouseoutMarker);
     }
   };
   // initialize the map on to the window
